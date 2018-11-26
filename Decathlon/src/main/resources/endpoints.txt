@@ -1,0 +1,8 @@
+
+fetchProductDetailsByStoreId
+
+1) http://localhost:9000/v1/public/stores/1/products/1
+	
+	Response: [{"productName":"Ball","productDecription":"Ball descp","productLevel":"small","productSport":"sports"}]
+	
+
