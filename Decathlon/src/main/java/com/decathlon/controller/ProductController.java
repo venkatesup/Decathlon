@@ -1,6 +1,7 @@
 package com.decathlon.controller;
 
 import java.net.URI;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,6 @@ import com.decathlon.dto.ProductDto;
 import com.decathlon.entities.Product;
 import com.decathlon.entities.Store;
 import com.decathlon.repository.ProductRepository;
-import com.decathlon.repository.StoreRepository;
 import com.decathlon.service.ProductService;
 
 @RestController
@@ -27,31 +27,31 @@ public class ProductController {
 	@Autowired
 	private ProductRepository productRepository;
 
-	@Autowired
-	private StoreRepository storeRepository;
+//	@Autowired
+//	private StoreRepository storeRepository;
 	
 	@Autowired
 	private ProductService productService;
 
-	
-	@PostMapping("/{storeId}/products")
-	public ResponseEntity<Product> createProduct(@PathVariable Integer storeId, @RequestBody Product product)
-			throws Exception {
-		
-		Optional<Store> store = storeRepository.findById(storeId);
-		
-		if (!store.isPresent()) {
-			throw new Exception("storeId" + storeId);
-		}
-		
-		product.setAssociatedStores(store.get());
-		Product savedProdcut = productRepository.save(product);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{productId}")
-				.buildAndExpand(savedProdcut.getProductId()).toUri();
-		
-		return ResponseEntity.created(uri).build();
-	}
+	// TODO: Need to fetch storedetails using feign client
+//	@PostMapping("/{storeId}/products")
+//	public ResponseEntity<Product> createProduct(@PathVariable Integer storeId, @RequestBody Product product)
+//			throws Exception {
+//		
+//		Optional<Store> store = storeRepository.findById(storeId);
+//		
+//		if (!store.isPresent()) {
+//			throw new Exception("storeId" + storeId);
+//		}
+//		
+//		product.setAssociatedStores(store.get());
+//		Product savedProdcut = productRepository.save(product);
+//		
+//		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{productId}")
+//				.buildAndExpand(savedProdcut.getProductId()).toUri();
+//		
+//		return ResponseEntity.created(uri).build();
+//	}
 	
 	@GetMapping("/products")
 	public List<ProductDto> retriveAllProducts() {

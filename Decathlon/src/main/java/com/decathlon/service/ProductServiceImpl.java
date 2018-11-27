@@ -1,6 +1,5 @@
 package com.decathlon.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.decathlon.dao.ProductDao;
 import com.decathlon.dto.ProductDto;
 import com.decathlon.entities.Product;
 import com.decathlon.repository.ProductRepository;
@@ -17,30 +15,25 @@ import com.decathlon.repository.ProductRepository;
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
-	ProductDao productDao;
-	
-	@Autowired
 	ProductRepository productRepository;
 
 	@Override
 	public List<ProductDto> fetchProductDetailsByStoreId(Integer productId,
 			Integer storeId) {
 
-		List<ProductDto> productDto = new ArrayList<ProductDto>();
-		List<Product> productList = productDao.fetchProductDetailsByStoreId(
+		List<ProductDto> productDtos = null;
+		// TODO : Need to fetch storeid details using feign client
+		
+		List<Product> productList = productRepository.fetchProductDetailsByStoreId(
 				productId, storeId);
-		// productList.stream().map(productDto -> new
-		// ProductDto(productDto.getProductName(),productDto.getProductLevel(),productDto.getProductSport())).collect(Collectors.toList());
-		for (Product dbProduct : productList) {
-			ProductDto temp = new ProductDto();
-			temp.setProductName(dbProduct.getProductName());
-			temp.setProductSport(dbProduct.getProductSport());
-			temp.setProductLevel(dbProduct.getProductLevel());
-			temp.setProductDecription(dbProduct.getProductDescription());
-			productDto.add(temp);
-		}
 
-		return productDto;
+		if(productList!=null && !productList.isEmpty()){
+			
+			productDtos=productList.stream().map(pro -> new ProductDto(pro.getProductId(),pro.getProductName(),
+										pro.getProductDescription(),pro.getProductLevel(),pro.getProductSport()) )
+								.collect(Collectors.toList());
+		}
+		return productDtos;
 	}
 
 	@Override
