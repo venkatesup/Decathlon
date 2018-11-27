@@ -2,6 +2,7 @@ package com.decathlon.dto;
 
 public class ProductDto {
 
+	Integer productId;
 	String productName;
 	String productDecription;
 	String productLevel;
@@ -11,6 +12,15 @@ public class ProductDto {
 		// TODO Auto-generated constructor stub
 	}
 
+	public ProductDto(Integer productId,String productName, String productDecription,
+			String productLevel, String productSport) {
+		super();
+		this.productName = productName;
+		this.productDecription = productDecription;
+		this.productLevel = productLevel;
+		this.productSport = productSport;
+	}
+	
 	public ProductDto(String productName, String productDecription,
 			String productLevel, String productSport) {
 		super();
@@ -52,4 +62,13 @@ public class ProductDto {
 		this.productSport = productSport;
 	}
 
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+	
+	
 }

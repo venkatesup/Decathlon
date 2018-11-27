@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.decathlon.dto.ProductDto;
 import com.decathlon.entities.Product;
 import com.decathlon.entities.Store;
 import com.decathlon.repository.ProductRepository;
 import com.decathlon.repository.StoreRepository;
+import com.decathlon.service.ProductService;
 
 @RestController
 public class ProductController {
@@ -27,41 +29,50 @@ public class ProductController {
 
 	@Autowired
 	private StoreRepository storeRepository;
+	
+	@Autowired
+	private ProductService productService;
 
-	@GetMapping("/products")
-	public List<Product> retriveAllProducts() {
-		return productRepository.findAll();
-	}
-
-	@GetMapping("/products/{productId}")
-	public Product retriveProduct(@PathVariable Integer productId)
-			throws Exception {
-
-		Optional<Product> product = productRepository.findById(productId);
-		if (!product.isPresent()) {
-			throw new Exception("productId" + productId);
-		}
-		return product.get();
-	}
-
+	
 	@PostMapping("/{storeId}/products")
-	public ResponseEntity<Product> createProduct(@PathVariable Integer storeId,
-			@RequestBody Product product) throws Exception {
+	public ResponseEntity<Product> createProduct(@PathVariable Integer storeId, @RequestBody Product product)
+			throws Exception {
+		
 		Optional<Store> store = storeRepository.findById(storeId);
+		
 		if (!store.isPresent()) {
 			throw new Exception("storeId" + storeId);
 		}
+		
 		product.setAssociatedStores(store.get());
 		Product savedProdcut = productRepository.save(product);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{productId}")
+		
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{productId}")
 				.buildAndExpand(savedProdcut.getProductId()).toUri();
+		
 		return ResponseEntity.created(uri).build();
 	}
+	
+	@GetMapping("/products")
+	public List<ProductDto> retriveAllProducts() {
+		
+		return productService.fetchAllProducts();
+	
+	}
+	
+	@GetMapping("/products/{productId}")
+	public ProductDto retriveProduct(@PathVariable("productId") Integer productId) throws Exception {
+
+		return productService.fetchProductDetailsById(productId);
+	}
+
 
 	@DeleteMapping("/products/{productId}")
-	public void deleteProduct(@PathVariable Integer productId) throws Exception {
-		productRepository.deleteById(productId);
+	public void deleteProduct(@PathVariable("productId") Integer productId) throws Exception {
+		
+		productService.deleteProductDetailsById(productId);
+		
 	}
+	
 	
 }

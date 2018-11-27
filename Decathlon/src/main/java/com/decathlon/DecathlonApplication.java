@@ -12,10 +12,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @EnableEurekaClient
 public class DecathlonApplication {
 
-	private static final Logger logger = Logger
-			.getLogger(DecathlonApplication.class);
+	private static final Logger logger = Logger.getLogger(DecathlonApplication.class);
 
 	public static void main(String[] args) {
+		
 		logger.log(Level.INFO, "main class");
 		SpringApplication.run(DecathlonApplication.class, args);
 	}
