@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,6 +23,7 @@ import com.decathlon.repository.ProductRepository;
 import com.decathlon.service.ProductService;
 
 @RestController
+@RequestMapping(value="/v1/public/products")
 public class ProductController {
 
 	@Autowired
@@ -53,26 +55,25 @@ public class ProductController {
 //		return ResponseEntity.created(uri).build();
 //	}
 	
-	@GetMapping("/products")
+	@GetMapping
 	public List<ProductDto> retriveAllProducts() {
 		
 		return productService.fetchAllProducts();
 	
 	}
 	
-	@GetMapping("/products/{productId}")
+	@GetMapping("/{productId}")
 	public ProductDto retriveProduct(@PathVariable("productId") Integer productId) throws Exception {
 
 		return productService.fetchProductDetailsById(productId);
 	}
 
 
-	@DeleteMapping("/products/{productId}")
+	@DeleteMapping("/{productId}")
 	public void deleteProduct(@PathVariable("productId") Integer productId) throws Exception {
 		
 		productService.deleteProductDetailsById(productId);
 		
 	}
-	
 	
 }

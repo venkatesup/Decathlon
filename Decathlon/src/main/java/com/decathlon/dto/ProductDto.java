@@ -1,20 +1,39 @@
 package com.decathlon.dto;
 
+import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel
 public class ProductDto {
 
 	Integer productId;
+	
+	@ApiModelProperty(required = true)
+	@NotNull(message = "productName can't be null")
 	String productName;
+	
+	@ApiModelProperty(required=true)
+	@NotNull(message="productDesc can't be null")
 	String productDecription;
+	
+	@ApiModelProperty(required=true)
+	@NotNull(message="productLevel can't be null")
 	String productLevel;
+	
+	@ApiModelProperty(required=true)
+	@NotNull(message="productSupport can't be null")
 	String productSport;
 
 	public ProductDto() {
-		// TODO Auto-generated constructor stub
+	
 	}
 
 	public ProductDto(Integer productId,String productName, String productDecription,
 			String productLevel, String productSport) {
 		super();
+		this.productId=productId;
 		this.productName = productName;
 		this.productDecription = productDecription;
 		this.productLevel = productLevel;
