@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@EnableEurekaClient
+//@EnableEurekaClient
 public class DecathlonApplication {
 
 	private static final Logger logger = Logger.getLogger(DecathlonApplication.class);
