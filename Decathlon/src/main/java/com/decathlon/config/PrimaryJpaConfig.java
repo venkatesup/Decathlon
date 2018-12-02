@@ -3,8 +3,12 @@ package com.decathlon.config;
 import java.beans.PropertyVetoException;
 import java.util.HashMap;
 
+import javax.sql.DataSource;
+
 import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.config.environment.Environment;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -15,18 +19,16 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.decathlon.DecathlonApplication;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
 @EnableJpaRepositories(basePackages = {
 		"com.decathlon.repository" }, 
 	entityManagerFactoryRef = "primaryEntityManager", transactionManagerRef = "primaryTransactionManager")
 @EnableTransactionManagement
-public class DataSourceConfig {
+public class PrimaryJpaConfig {
 
-	private static final Logger logger = Logger.getLogger(DataSourceConfig.class);
+	private static final Logger logger = Logger.getLogger(PrimaryJpaConfig.class);
 
 	@Value("${spring.datasource.url}")
 	private String url;
@@ -49,16 +51,23 @@ public class DataSourceConfig {
 	@Value("${spring.jpa.hibernate.naming-strategy}")
 	private String namingStragey;
 
+	
 	@Primary
 	@Bean
-	public HikariDataSource primaryDataSource() {
+	public DataSource primaryDataSource() throws PropertyVetoException {
 
-		HikariConfig jdbcConfig = new HikariConfig();
-		jdbcConfig.setJdbcUrl(url);
-		jdbcConfig.setUsername(username);
-		jdbcConfig.setPassword(password);
+		logger.info("Inside primaryDataSource");
+		final ComboPooledDataSource dataSource = new com.mchange.v2.c3p0.ComboPooledDataSource();
+		dataSource.setDriverClass("com.mysql.jdbc.Driver");
+		dataSource.setJdbcUrl(url);
+		dataSource.setUser(username);
+		dataSource.setPassword(password);
+		dataSource.setPreferredTestQuery("Select 1");
+		dataSource.setMaxIdleTime(1200);
+		dataSource.setMaxIdleTimeExcessConnections(1200);
+		dataSource.setMaxConnectionAge(86400);
+		return dataSource;
 
-		return new HikariDataSource(jdbcConfig);
 	}
 
 	@Primary
