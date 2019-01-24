@@ -1,0 +1,22 @@
+
+fetchProductDetailsByStoreId
+
+1) http://localhost:9000/v1/public/stores/1/products/1
+	
+	Response: [{"productName":"Ball","productDecription":"Ball descp","productLevel":"small","productSport":"sports"}]
+	
+
+http://localhost:8002/decathlon-product/swagger-ui.html
+
+
+# testing url for config server is running or not
+
+http://localhost:8001/decathlon-config-server/uat
+
+
+
+Eureka port - 8000
+ConfigServer Port - 8001
+
+ProductController  - 8002
+StoreController    - 8003
