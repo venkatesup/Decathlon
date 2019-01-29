@@ -3,6 +3,8 @@ package com.decathlon.product.controller;
 import java.net.URI;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,6 +40,9 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(ProductController.class);
+
 	// TODO: Need to fetch storedetails using feign client
 	@PostMapping("/{storeId}/products")
 	public ResponseEntity<Product> createProduct(@PathVariable Integer storeId,
@@ -56,6 +61,7 @@ public class ProductController {
 
 	@GetMapping
 	public List<ProductDto> retriveAllProducts() {
+
 		return productService.fetchAllProducts();
 	}
 
@@ -63,8 +69,7 @@ public class ProductController {
 	public ProductDto retriveProduct(
 			@PathVariable("productId") Integer productId) throws Exception {
 		StoresDto storesDto = storeServiceProxy.findByStoreId(productId);
-		System.err.println("stores id0" + storesDto.getStoreId() + "name "
-				+ storesDto.getStoreName());
+		logger.info("storesDto in product Controller " + storesDto);
 		return productService.fetchProductDetailsById(productId);
 	}
 
